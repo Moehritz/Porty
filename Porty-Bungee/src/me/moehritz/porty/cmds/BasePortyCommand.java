@@ -23,14 +23,14 @@ public abstract class BasePortyCommand extends Command {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length == 0) {
-			sendWrongUsage(sender);
-		} else if (args[0].equalsIgnoreCase("help")) {
-			sender.sendMessage(TextComponent.fromLegacyText(PREFIX_HELP + "/" + getName() + " help:"));
-			sendMessages(sender, getHelpText());
-		} else {
-			executeCommand(sender, args);
+		if (args.length != 0) {
+			if (args[0].equalsIgnoreCase("help")) {
+				sender.sendMessage(TextComponent.fromLegacyText(PREFIX_HELP + "/" + getName() + " help:"));
+				sendMessages(sender, getHelpText());
+				return;
+			}
 		}
+		execute(sender, args);
 	}
 
 	public void sendMessage(CommandSender sender, String text) {
