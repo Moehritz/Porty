@@ -1,14 +1,22 @@
 package me.moehritz.porty.internal;
 
+import java.util.concurrent.TimeUnit;
+
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.scheduler.ScheduledTask;
+import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 
 public class ICallback implements Callback {
 
+	private static long timeoutInSeconds = 5;
+
 	private ProxiedPlayer player;
 	private State state;
 	private CallbackRunnable runnnable;
+	private ScheduledTask timeoutCheck;
 	private int uid;
 
 	public ICallback(ProxiedPlayer player) {
@@ -52,6 +60,12 @@ public class ICallback implements Callback {
 
 	public void start() {
 		state = State.WAITING;
+		timeoutCheck = ProxyServer.getInstance().getScheduler().schedule(Porty.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				timeout();
+			}
+		}, timeoutInSeconds, TimeUnit.SECONDS);
 	}
 
 	public void weirdThingsAreGoingOn() {
@@ -60,6 +74,8 @@ public class ICallback implements Callback {
 	}
 
 	private void run(boolean success) {
+		timeoutCheck.cancel();
+		
 		if (runnnable != null) {
 			if (success) {
 				runnnable.success();
