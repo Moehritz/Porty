@@ -2,6 +2,7 @@ package me.moehritz.porty;
 
 import me.moehritz.porty.api.PortyAPI;
 import me.moehritz.porty.cmds.TeleportCommand;
+import me.moehritz.porty.cmds.TpAllCommand;
 import me.moehritz.porty.cmds.TpHereCommand;
 import me.moehritz.porty.internal.IPortyAPI;
 import me.moehritz.porty.internal.io.IOStatics;
@@ -34,6 +35,7 @@ public class Porty extends Plugin {
 		
 		getProxy().getPluginManager().registerCommand(this, new TeleportCommand());
 		getProxy().getPluginManager().registerCommand(this, new TpHereCommand());
+		getProxy().getPluginManager().registerCommand(this, new TpAllCommand());
 	}
 
 }

@@ -30,7 +30,7 @@ public abstract class BasePortyCommand extends Command {
 				return;
 			}
 		}
-		execute(sender, args);
+		executeCommand(sender, args);
 	}
 
 	public void sendMessage(CommandSender sender, String text) {
