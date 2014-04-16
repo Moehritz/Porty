@@ -12,4 +12,6 @@ public interface PortyAPI {
 
 	public Callback teleport(ProxiedPlayer from, GlobalLocation to, CallbackRunnable run);
 	
+	public TeleportRequestHandler getTeleportRequestHandler();
+	
 }

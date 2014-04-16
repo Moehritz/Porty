@@ -4,10 +4,12 @@ import com.google.common.base.Preconditions;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.CallbackRunnable;
 import me.moehritz.porty.api.GlobalLocation;
 import me.moehritz.porty.api.PortyAPI;
 import me.moehritz.porty.api.Callback;
+import me.moehritz.porty.api.TeleportRequestHandler;
 import me.moehritz.porty.internal.io.IOStatics;
 import me.moehritz.porty.internal.io.OutgoingPluginMessage;
 
@@ -70,6 +72,12 @@ public class IPortyAPI implements PortyAPI {
 
 		if (!player.getServer().getInfo().equals(server)) player.connect(server);
 
+	}
+
+	@Override
+	public TeleportRequestHandler getTeleportRequestHandler()
+	{
+		return Porty.getInstance().getTpaHandler();
 	}
 
 }
