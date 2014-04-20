@@ -14,24 +14,29 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class TeleportScheduler implements Listener {
+public class TeleportScheduler implements Listener
+{
 
 	private Map<OfflinePlayer, GlobalLocation> scheduledTeleports = new HashMap<OfflinePlayer, GlobalLocation>();
 	private Map<OfflinePlayer, Integer> scheduledTeleportUids = new HashMap<OfflinePlayer, Integer>();
 
-	public TeleportScheduler() {
+	public TeleportScheduler()
+	{
 		Bukkit.getPluginManager().registerEvents(this, Porty.getInstance());
 	}
 
-	public void scheduleTeleport(OfflinePlayer player, GlobalLocation loc, int uid) {
-		if (player.isOnline()) {
+	public void scheduleTeleport(OfflinePlayer player, GlobalLocation loc, int uid)
+	{
+		if (player.isOnline())
+		{
 			player.getPlayer().teleport(loc.toBukkitLocation());
-			
+
 			CallbackSender.sendCallback(uid, 0);
 			return;
 		}
 
-		if (scheduledTeleports.containsKey(player)) {
+		if (scheduledTeleports.containsKey(player))
+		{
 			scheduledTeleports.remove(player);
 			scheduledTeleportUids.remove(player);
 		}
@@ -41,16 +46,21 @@ public class TeleportScheduler implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
 		Player player = event.getPlayer();
-		if (scheduledTeleports.containsKey(player)) {
-			try {
+		if (scheduledTeleports.containsKey(player))
+		{
+			try
+			{
 				GlobalLocation loc = scheduledTeleports.get(player);
 
 				event.getPlayer().teleport(loc.toBukkitLocation());
 
 				CallbackSender.sendCallback(scheduledTeleportUids.get(player), 0);
-			} catch (Exception ex) {
+			}
+			catch (Exception ex)
+			{
 				// Occurs if the target World is null
 				CallbackSender.sendCallback(scheduledTeleportUids.get(player), 1);
 			}

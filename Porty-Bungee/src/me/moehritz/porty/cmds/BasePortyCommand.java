@@ -8,11 +8,11 @@ import net.md_5.bungee.api.plugin.Command;
 public abstract class BasePortyCommand extends Command
 {
 
-	protected static ChatColor COLOR_HIGHLIGHT = ChatColor.YELLOW, COLOR_TEXT = ChatColor.GRAY;
+	public static ChatColor COLOR_HIGHLIGHT = ChatColor.YELLOW, COLOR_TEXT = ChatColor.GRAY;
 
-	protected static String PREFIX_MAIN = ChatColor.GREEN + "[TP] " + COLOR_TEXT;
-	protected static String PREFIX_HELP = ChatColor.GREEN + "[TP-?] " + COLOR_TEXT;
-	protected static String PREFIX_TEXT = ChatColor.GREEN + "> " + COLOR_TEXT;
+	public static String PREFIX_MAIN = ChatColor.GREEN + "[TP] " + COLOR_TEXT;
+	public static String PREFIX_HELP = ChatColor.GREEN + "[TP-?] " + COLOR_TEXT;
+	public static String PREFIX_TEXT = ChatColor.GREEN + "> " + COLOR_TEXT;
 
 	public BasePortyCommand(String name, String permission, String[] aliases)
 	{

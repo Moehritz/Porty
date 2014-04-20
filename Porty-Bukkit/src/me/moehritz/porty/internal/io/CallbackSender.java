@@ -4,9 +4,11 @@ import me.moehritz.porty.Porty;
 
 import org.bukkit.Bukkit;
 
-public class CallbackSender {
+public class CallbackSender
+{
 
-	public static void sendCallback(int uid, int ret) {
+	public static void sendCallback(int uid, int ret)
+	{
 		OutgoingPluginMessage out = new OutgoingPluginMessage(IOStatics.CALLBACK);
 
 		out.write(uid);

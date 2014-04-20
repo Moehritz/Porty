@@ -1,6 +1,7 @@
 package me.moehritz.porty.api;
 
-public interface CallbackRunnable {
+public interface CallbackRunnable
+{
 
 	public void success();
 

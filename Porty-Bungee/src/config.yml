@@ -1,0 +1,11 @@
+# Teleport timer
+# global: Affects every server (-1 or 0 to disable)
+# server: Affects only one server (0 for no timer, -1 to use the global timer)
+timer:
+  global: -1
+  server:
+    lobby: -1
+    testserver: 5
+
+# plugin message timeout in seconds
+timeout: 5

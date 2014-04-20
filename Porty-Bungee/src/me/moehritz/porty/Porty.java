@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import lombok.Getter;
 import me.moehritz.porty.api.PortyAPI;
+import me.moehritz.porty.api.TaskHandler;
 import me.moehritz.porty.api.TeleportRequestHandler;
 import me.moehritz.porty.cmds.TeleportCommand;
 import me.moehritz.porty.cmds.TpAcceptCommand;
@@ -14,7 +15,9 @@ import me.moehritz.porty.cmds.TpHereCommand;
 import me.moehritz.porty.cmds.TpaCommand;
 import me.moehritz.porty.cmds.TpaHereCommand;
 import me.moehritz.porty.internal.IPortyAPI;
+import me.moehritz.porty.internal.ITaskHandler;
 import me.moehritz.porty.internal.ITeleportRequestHandler;
+import me.moehritz.porty.internal.TeleportTimer;
 import me.moehritz.porty.internal.io.IOStatics;
 import me.moehritz.porty.internal.io.InputHandler;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -39,6 +42,10 @@ public class Porty extends Plugin
 	private TeleportRequestHandler tpaHandler;
 	@Getter
 	private PortyConfiguration config;
+	@Getter
+	private TaskHandler taskHandler;
+	@Getter
+	private TeleportTimer timer;
 
 	@Override
 	public void onEnable()
@@ -63,6 +70,8 @@ public class Porty extends Plugin
 
 		this.api = new IPortyAPI();
 		tpaHandler = new ITeleportRequestHandler();
+		taskHandler = new ITaskHandler();
+		timer = new TeleportTimer();
 
 		getProxy().registerChannel(IOStatics.CHANNEL);
 

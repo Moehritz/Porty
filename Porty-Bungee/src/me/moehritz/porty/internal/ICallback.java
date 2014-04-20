@@ -10,9 +10,8 @@ import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 
-public class ICallback implements Callback {
-
-	private static long timeoutInSeconds = 5;
+public class ICallback implements Callback
+{
 
 	private ProxiedPlayer player;
 	private State state;
@@ -22,70 +21,90 @@ public class ICallback implements Callback {
 	@Setter
 	private int extraTime;
 
-	public ICallback(ProxiedPlayer player) {
-		this(player, null);
-	}
-
-	public ICallback(ProxiedPlayer player, CallbackRunnable run) {
+	public ICallback(ProxiedPlayer player)
+	{
 		this.player = player;
-		this.runnnable = run;
 		setUniqueID();
 	}
 
-	private void setUniqueID() {
-		this.uid = TeleportHandler.requestNewID();
+	private void setUniqueID()
+	{
+		this.uid = Porty.getInstance().getTaskHandler().requestNewID();
 	}
 
 	@Override
-	public State getState() {
+	public State getState()
+	{
 		return state;
 	}
 
 	@Override
-	public ProxiedPlayer getPlayer() {
+	public ProxiedPlayer getPlayer()
+	{
 		return player;
 	}
 
-	public void timeout() {
+	public void timeout()
+	{
 		state = State.TIMEOUT;
 		run(false);
 	}
 
-	public void success() {
+	public void success()
+	{
 		state = State.SUCCESS;
 		run(true);
 	}
 
-	public void fail() {
+	public void fail(String helpmsg)
+	{
 		state = State.ERROR;
-		run(false);
+		run(false, helpmsg);
 	}
 
-	public void start() {
+	public void start()
+	{
 		state = State.WAITING;
-		timeoutCheck = ProxyServer.getInstance().getScheduler().schedule(Porty.getInstance(), new Runnable() {
+		timeoutCheck = ProxyServer.getInstance().getScheduler().schedule(Porty.getInstance(), new Runnable()
+		{
 			@Override
-			public void run() {
+			public void run()
+			{
 				timeout();
 			}
-		}, timeoutInSeconds, TimeUnit.SECONDS);
 		}, Porty.getInstance().getConfig().getTimeout() + extraTime, TimeUnit.SECONDS);
 	}
 
-	public void weirdThingsAreGoingOn() {
+	public void weirdThingsAreGoingOn()
+	{
 		state = State.SOMETHING_WEIRD_HAPPENED;
 		run(false);
 	}
 
-	private void run(boolean success) {
-		timeoutCheck.cancel();
-		
-		if (runnnable != null) {
-			if (success) {
+	private void run(boolean success)
+	{
+		run(success, null);
+	}
+
+	private void run(boolean success, String helpmsg)
+	{
+		if (timeoutCheck != null) timeoutCheck.cancel();
+
+		if (runnnable != null)
+		{
+			if (success)
+			{
 				runnnable.success();
-			} else {
+			}
+			else if (helpmsg != null)
+			{
+				runnnable.error(helpmsg);
+			}
+			else
+			{
 				String errmsg = "Unknown Error.";
-				switch (state) {
+				switch (state)
+				{
 				case ERROR:
 					errmsg = "Teleport failed.";
 					break;
@@ -104,12 +123,14 @@ public class ICallback implements Callback {
 	}
 
 	@Override
-	public void setRunnable(CallbackRunnable run) {
+	public void setRunnable(CallbackRunnable run)
+	{
 		this.runnnable = run;
 	}
 
 	@Override
-	public int getUniqueID() {
+	public int getUniqueID()
+	{
 		return uid;
 	}
 }
