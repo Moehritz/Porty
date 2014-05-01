@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.CallbackRunnable;
 import me.moehritz.porty.api.GlobalLocation;
@@ -46,20 +47,13 @@ public class IPortyAPI implements PortyAPI
 		getTaskHandler().addRunningTask(callback);
 		if (timer <= 0 || ignoreTimer)
 		{
-
-			silentServerSwitch(player, to.getServer().getInfo());
-
-			OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_PLAYER, to.getServer().getInfo());
-			msg.setCallback(callback);
-			msg.write(callback.getUniqueID());
-			writeTeleport(player, to, msg);
-			msg.send();
+			executeTeleport(player, to, callback);
 		}
 		else
 		{
 			ICallback timerCallback = new ICallback(player);
 			getTaskHandler().addRunningTask(timerCallback);
-			
+
 			OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
 			msg.setCallback(timerCallback);
 			timerCallback.setExtraTime(timer);
@@ -77,14 +71,7 @@ public class IPortyAPI implements PortyAPI
 				@Override
 				public void success()
 				{
-					silentServerSwitch(player, to.getServer().getInfo());
-
-					OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_PLAYER, to.getServer()
-							.getInfo());
-					msg.setCallback(callback);
-					msg.write(callback.getUniqueID());
-					writeTeleport(player, to, msg);
-					msg.send();
+					executeTeleport(player, to, callback);
 				}
 
 				@Override
@@ -114,19 +101,13 @@ public class IPortyAPI implements PortyAPI
 
 		if (timer <= 0 || ignoreTimer)
 		{
-			silentServerSwitch(player, to.getServerInfo());
-
-			OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServerInfo());
-			msg.setCallback(callback);
-			msg.write(callback.getUniqueID());
-			writeTeleport(player, to, msg);
-			msg.send();
+			executeTeleport(player, to, callback);
 		}
 		else
 		{
 			ICallback timerCallback = new ICallback(player);
 			getTaskHandler().addRunningTask(timerCallback);
-			
+
 			OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
 			msg.setCallback(timerCallback);
 			timerCallback.setExtraTime(timer);
@@ -135,7 +116,7 @@ public class IPortyAPI implements PortyAPI
 			msg.write(timer);
 			msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Don´t move for "
+			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Do not move for "
 					+ BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
 
 			timerCallback.setRunnable(new CallbackRunnable()
@@ -144,13 +125,7 @@ public class IPortyAPI implements PortyAPI
 				@Override
 				public void success()
 				{
-					silentServerSwitch(player, to.getServerInfo());
-
-					OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServerInfo());
-					msg.setCallback(callback);
-					msg.write(callback.getUniqueID());
-					writeTeleport(player, to, msg);
-					msg.send();
+					executeTeleport(player, to, callback);
 				}
 
 				@Override
@@ -172,17 +147,29 @@ public class IPortyAPI implements PortyAPI
 		}
 	}
 
-	private void writeTeleport(ProxiedPlayer player, GlobalLocation to, OutgoingPluginMessage msg)
+	private void executeTeleport(ProxiedPlayer player, GlobalLocation to, ICallback callback)
 	{
+		silentServerSwitch(player, to.getServerInfo());
+
+		OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServerInfo());
+		msg.setCallback(callback);
+		msg.write(callback.getUniqueID());
 		msg.write(player.getName());
 		msg.write(to.getServer()).write(to.getWorld()).write(to.getX()).write(to.getY()).write(to.getZ());
 		msg.write(to.getYaw()).write(to.getPitch());
+		msg.send();
 	}
 
-	private void writeTeleport(ProxiedPlayer player, ProxiedPlayer to, OutgoingPluginMessage msg)
+	private void executeTeleport(ProxiedPlayer player, ProxiedPlayer to, ICallback callback)
 	{
+		silentServerSwitch(player, to.getServer().getInfo());
+
+		OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServer().getInfo());
+		msg.setCallback(callback);
+		msg.write(callback.getUniqueID());
 		msg.write(player.getName());
 		msg.write(to.getName());
+		msg.send();
 	}
 
 	@Override
