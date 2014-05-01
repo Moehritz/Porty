@@ -21,9 +21,24 @@ public class PortyConfiguration
 	private int globalTeleportTimer;
 	private int timeout;
 	private Map<String, Integer> serverTeleportTimer;
+	
+	private File configFile;
+	
+	public void reload() {
+		try
+		{
+			load(configFile);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	public void load(File file) throws IOException
 	{
+		this.configFile = file;
+		
 		if (!file.exists())
 		{
 			saveDefaultValues(file);

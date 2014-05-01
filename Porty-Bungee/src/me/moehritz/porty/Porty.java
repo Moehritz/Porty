@@ -7,6 +7,7 @@ import lombok.Getter;
 import me.moehritz.porty.api.PortyAPI;
 import me.moehritz.porty.api.TaskHandler;
 import me.moehritz.porty.api.TeleportRequestHandler;
+import me.moehritz.porty.cmds.PortyReloadCommand;
 import me.moehritz.porty.cmds.TeleportCommand;
 import me.moehritz.porty.cmds.TpAcceptCommand;
 import me.moehritz.porty.cmds.TpAllCommand;
@@ -84,6 +85,7 @@ public class Porty extends Plugin
 		getProxy().getPluginManager().registerCommand(this, new TpaHereCommand());
 		getProxy().getPluginManager().registerCommand(this, new TpDenyCommand());
 		getProxy().getPluginManager().registerCommand(this, new TpAcceptCommand());
+		getProxy().getPluginManager().registerCommand(this, new PortyReloadCommand());
 	}
 
 }
