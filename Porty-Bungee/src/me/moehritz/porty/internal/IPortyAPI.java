@@ -164,7 +164,7 @@ public class IPortyAPI implements PortyAPI
 	{
 		silentServerSwitch(player, to.getServer().getInfo());
 
-		OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServer().getInfo());
+		OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_PLAYER, to.getServer().getInfo());
 		msg.setCallback(callback);
 		msg.write(callback.getUniqueID());
 		msg.write(player.getName());
