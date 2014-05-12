@@ -20,11 +20,13 @@ public class PortyConfiguration
 {
 	private int globalTeleportTimer;
 	private int timeout;
+	private String commandPrefix;
 	private Map<String, Integer> serverTeleportTimer;
-	
+
 	private File configFile;
-	
-	public void reload() {
+
+	public void reload()
+	{
 		try
 		{
 			load(configFile);
@@ -38,7 +40,7 @@ public class PortyConfiguration
 	public void load(File file) throws IOException
 	{
 		this.configFile = file;
-		
+
 		if (!file.exists())
 		{
 			saveDefaultValues(file);
@@ -55,6 +57,7 @@ public class PortyConfiguration
 		}
 
 		timeout = cfg.getInt("timeout", 5);
+		commandPrefix = cfg.getString("commandprefix", "");
 	}
 
 	public void saveDefaultValues(File file) throws IOException

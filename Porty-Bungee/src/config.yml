@@ -9,3 +9,8 @@ timer:
 
 # plugin message timeout in seconds
 timeout: 5
+
+# command-prefixes:
+# /<prefix><commandname> <args>
+# Example: '/prefixtpa Moehritz'
+commandprefix: ""

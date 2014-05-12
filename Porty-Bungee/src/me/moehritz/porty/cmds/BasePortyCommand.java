@@ -1,5 +1,6 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Porty;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -16,7 +17,17 @@ public abstract class BasePortyCommand extends Command
 
 	public BasePortyCommand(String name, String permission, String[] aliases)
 	{
-		super(name, permission, aliases);
+		super(appendPrefix(name)[0], permission, appendPrefix(aliases));
+	}
+
+	private static String[] appendPrefix(String... args)
+	{
+		String pre = Porty.getInstance().getConfig().getCommandPrefix();
+		for (int i = 0; i < args.length; i++)
+		{
+			args[i] = pre + args[i];
+		}
+		return args;
 	}
 
 	public abstract String[] getHelpText();
