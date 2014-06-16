@@ -16,8 +16,7 @@ public class PlayerListener implements Listener
 		TeleportTimerRun run = Porty.getInstance().getTeleportTimer().getTimer(e.getPlayer());
 		if (run != null)
 		{
-			if (e.getFrom().getX() != e.getTo().getX() || e.getFrom().getY() != e.getTo().getY()
-					|| e.getFrom().getZ() != e.getTo().getZ())
+			if (e.getFrom().getX() != e.getTo().getX() || e.getFrom().getY() != e.getTo().getY() || e.getFrom().getZ() != e.getTo().getZ())
 			{
 				run.cancel();
 			}

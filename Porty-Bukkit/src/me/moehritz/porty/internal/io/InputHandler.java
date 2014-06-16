@@ -103,6 +103,6 @@ public class InputHandler implements PluginMessageListener
 			return;
 		}
 		Porty.getInstance().getTeleportTimer().addTimer(uid, player, time);
-		
+
 	}
 }

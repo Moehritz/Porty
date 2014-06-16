@@ -22,6 +22,7 @@ import me.moehritz.porty.internal.TeleportTimer;
 import me.moehritz.porty.internal.io.IOStatics;
 import me.moehritz.porty.internal.io.InputHandler;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginManager;
 
 public class Porty extends Plugin
 {
@@ -53,7 +54,8 @@ public class Porty extends Plugin
 	{
 		instance = this;
 
-		config = new PortyConfiguration();
+		this.config = new PortyConfiguration();
+
 		File dataFolder = getDataFolder();
 		if (!dataFolder.exists())
 		{
@@ -70,22 +72,23 @@ public class Porty extends Plugin
 		}
 
 		this.api = new IPortyAPI();
-		tpaHandler = new ITeleportRequestHandler();
-		taskHandler = new ITaskHandler();
-		timer = new TeleportTimer();
+		this.tpaHandler = new ITeleportRequestHandler();
+		this.taskHandler = new ITaskHandler();
+		this.timer = new TeleportTimer();
 
 		getProxy().registerChannel(IOStatics.CHANNEL);
 
 		new InputHandler();
 
-		getProxy().getPluginManager().registerCommand(this, new TeleportCommand());
-		getProxy().getPluginManager().registerCommand(this, new TpHereCommand());
-		getProxy().getPluginManager().registerCommand(this, new TpAllCommand());
-		getProxy().getPluginManager().registerCommand(this, new TpaCommand());
-		getProxy().getPluginManager().registerCommand(this, new TpaHereCommand());
-		getProxy().getPluginManager().registerCommand(this, new TpDenyCommand());
-		getProxy().getPluginManager().registerCommand(this, new TpAcceptCommand());
-		getProxy().getPluginManager().registerCommand(this, new PortyReloadCommand());
+		PluginManager pm = getProxy().getPluginManager();
+		pm.registerCommand(this, new TeleportCommand());
+		pm.registerCommand(this, new TpHereCommand());
+		pm.registerCommand(this, new TpAllCommand());
+		pm.registerCommand(this, new TpaCommand());
+		pm.registerCommand(this, new TpaHereCommand());
+		pm.registerCommand(this, new TpDenyCommand());
+		pm.registerCommand(this, new TpAcceptCommand());
+		pm.registerCommand(this, new PortyReloadCommand());
 	}
 
 }

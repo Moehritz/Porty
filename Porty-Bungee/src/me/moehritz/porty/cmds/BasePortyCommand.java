@@ -69,14 +69,12 @@ public abstract class BasePortyCommand extends Command
 
 	public void sendWrongUsage(CommandSender sender)
 	{
-		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + "Type '" + COLOR_HIGHLIGHT + "/" + getName()
-				+ " help" + COLOR_TEXT + "' to get help."));
+		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + "Type '" + COLOR_HIGHLIGHT + "/" + getName() + " help" + COLOR_TEXT + "' to get help."));
 	}
 
 	public void sendNoPerm(CommandSender sender, String perm)
 	{
-		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + "You need the permission '" + COLOR_HIGHLIGHT
-				+ perm + COLOR_TEXT + "' for this."));
+		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + "You need the permission '" + COLOR_HIGHLIGHT + perm + COLOR_TEXT + "' for this."));
 	}
 
 }

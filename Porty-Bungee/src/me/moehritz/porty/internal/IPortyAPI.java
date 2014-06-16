@@ -62,8 +62,7 @@ public class IPortyAPI implements PortyAPI
 			msg.write(timer);
 			msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Don´t move for "
-					+ BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
+			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Don´t move for " + BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
 
 			timerCallback.setRunnable(new CallbackRunnable()
 			{
@@ -116,8 +115,7 @@ public class IPortyAPI implements PortyAPI
 			msg.write(timer);
 			msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Do not move for "
-					+ BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
+			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Do not move for " + BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
 
 			timerCallback.setRunnable(new CallbackRunnable()
 			{
