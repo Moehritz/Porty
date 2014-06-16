@@ -1,5 +1,6 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -15,8 +16,7 @@ public class TpAcceptCommand extends BasePortyCommand
 	@Override
 	public String[] getHelpText()
 	{
-		return new String[] { "Responds to a teleport request", "/tpaccept to accept a request",
-				"/tpdeny to deny the teleport" };
+		return Messages.getMessages("tpaccept_help");
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class TpAcceptCommand extends BasePortyCommand
 	{
 		if (!(sender instanceof ProxiedPlayer))
 		{
-			sendMessage(sender, "You cannot use the command as console!");
+			sendMessage(sender, Messages.getMessage("console_warning", "&7You can not use this command as console or comandblocks"));
 			return;
 		}
 		if (args.length == 0)
@@ -34,7 +34,7 @@ public class TpAcceptCommand extends BasePortyCommand
 			ProxiedPlayer targetPlayer = Porty.getApi().getTeleportRequestHandler().getTarget(fromPlayer);
 			if (targetPlayer == null)
 			{
-				sendMessage(fromPlayer, "You don´t have any open requests!");
+				sendMessage(fromPlayer, Messages.getMessage("tpa_no_requests", "&7You don´t have any open requests!"));
 				return;
 			}
 
@@ -49,7 +49,7 @@ public class TpAcceptCommand extends BasePortyCommand
 			}
 
 			Porty.getApi().getTeleportRequestHandler().deleteTeleportRequest(fromPlayer);
-			sendMessage(targetPlayer, "Your request has been accepted");
+			sendMessage(targetPlayer, Messages.getMessage("tpaccept", "&7Your request has been accepted!"));
 		}
 		else
 		{

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import lombok.Getter;
+
 import me.moehritz.porty.api.PortyAPI;
 import me.moehritz.porty.api.TaskHandler;
 import me.moehritz.porty.api.TeleportRequestHandler;
@@ -21,6 +22,7 @@ import me.moehritz.porty.internal.ITeleportRequestHandler;
 import me.moehritz.porty.internal.TeleportTimer;
 import me.moehritz.porty.internal.io.IOStatics;
 import me.moehritz.porty.internal.io.InputHandler;
+
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -70,6 +72,15 @@ public class Porty extends Plugin
 		{
 			e.printStackTrace();
 		}
+		File messagesFile = new File(dataFolder, "messages.yml");
+		try
+		{
+			Messages.load(messagesFile);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 
 		this.api = new IPortyAPI();
 		this.tpaHandler = new ITeleportRequestHandler();
@@ -80,6 +91,20 @@ public class Porty extends Plugin
 
 		new InputHandler();
 
+		registerCommands();
+	}
+
+	public void reload()
+	{
+		getConfig().reload();
+		Messages.reload();
+		PluginManager pm = getProxy().getPluginManager();
+		pm.unregisterCommands(this);
+		registerCommands();
+	}
+
+	private void registerCommands()
+	{
 		PluginManager pm = getProxy().getPluginManager();
 		pm.registerCommand(this, new TeleportCommand());
 		pm.registerCommand(this, new TpHereCommand());
@@ -90,5 +115,4 @@ public class Porty extends Plugin
 		pm.registerCommand(this, new TpAcceptCommand());
 		pm.registerCommand(this, new PortyReloadCommand());
 	}
-
 }

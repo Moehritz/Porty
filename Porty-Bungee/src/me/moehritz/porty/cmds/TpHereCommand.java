@@ -1,6 +1,8 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
+import me.moehritz.porty.TextUtil;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 import net.md_5.bungee.api.CommandSender;
@@ -18,7 +20,7 @@ public class TpHereCommand extends BasePortyCommand
 	@Override
 	public String[] getHelpText()
 	{
-		return new String[] { "Teleports a player to you", "/tphere <target> - Teleports the player to you" };
+		return Messages.getMessages("tphere_help");
 	}
 
 	@Override
@@ -28,7 +30,7 @@ public class TpHereCommand extends BasePortyCommand
 		{ // /tphere <player>
 			if (!(sender instanceof ProxiedPlayer))
 			{
-				sendMessage(sender, "You can´t teleport players to the console! Use /tp <player> <target> instead");
+				sendMessage(sender, Messages.getMessage("console_warning", "&7You can not use this command as console or comandblock"));
 				return;
 			}
 
@@ -37,8 +39,7 @@ public class TpHereCommand extends BasePortyCommand
 
 			if (fromPlayer == null)
 			{
-				sendMessage(sender, "Can´t find the player " + BasePortyCommand.COLOR_HIGHLIGHT + fromName
-						+ BasePortyCommand.COLOR_TEXT + ".");
+				sendMessages(sender, TextUtil.applyTag("<player>", fromName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
 				return;
 			}
 
@@ -51,13 +52,13 @@ public class TpHereCommand extends BasePortyCommand
 				@Override
 				public void success()
 				{
-					sendMessage(sender, "Teleported.");
+					sendMessage(sender, Messages.getMessage("teleport_success", "&7Teleported."));
 				}
 
 				@Override
 				public void error(String errmsg)
 				{
-					sendMessage(sender, "The teleport failed: " + errmsg);
+					sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
 				}
 			});
 		}

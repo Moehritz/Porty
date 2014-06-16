@@ -1,0 +1,28 @@
+prefixColor: "&a"
+
+reload_help: "&7Reloads the configuration"
+reload_done: "&7The configuration has been reloaded"
+teleport_help: ["&7Teleports a player to a player","&7/tp <target> - Teleports the sender","&7/tp <player> <target> - Teleports the given player"]
+teleport_success: "&7Teleported"
+teleport_fail: "&7The teleport failed: <errmsg>"
+tpall_help: ["&7Teleports all players on this BungeeCord instance","&7/tpall - Teleports them to you","&7/tp <target> - Teleports them to the given player"]
+tpall_success_you: "&7Teleported all players to you"
+tpall_success: "&7Teleported all players to &e<player>"
+tphere_help: ["&7Teleports a player to you","&7/tphere <target> - Teleports the player to you"]
+tphere_help: ["&7Teleports a player to you","&7/tphere <target> - Teleports the player to you"]
+tpaccept_help: ["&7Responds to a teleport request","&7/tpaccept to accept a request", "&7/tpdeny to deny the teleport"]
+tpa_no_requests: "&7You do not have any open requests!"
+tpaccept: "&7Your request has been accepted!"
+tpdeny_help: ["&7Responds to a teleport request","&7/tpaccept to accept a request","&7/tpdeny to deny the teleport"]
+tpdeny: "&7Request has been cancelled"
+tpa_help: ["&7Asks a player to teleport to him","&7/tpa <player> - Sends the request, it can be accepted with /tpaccept or denied with /tpdeny"]
+tpa_request_sent: "&7Your request has been sent"
+tpa: "&7The player &e<player>&7 asks you to teleport to you. Use &e/tpaccept&7 or &e/tpdeny&7 in order to respond to it"
+tpahere_help: ["&7Asks a player to teleport to you","&7/tpa <player> - Sends the request, it can be accepted with /tpaccept or denied with /tpdeny"]
+tpahere: "&7The player &e<player> &7asks you to teleport to him. Use &e/tpaccept&7 or &e/tpdeny&7 in order to respond to it"
+player_not_found: "&7Can not find the player &e<player>"
+console_warning: "&7You can not use this command as console or comandblocks"
+teleport_cooldown: "&7Do not move for &e<time> &7seconds!"
+timer_fail: "&7You moved"
+general_help: "&7Type '&e/<command> help&7' to get help."
+perm_needed: "&7You need the permission '&e<perm>&7' for this."

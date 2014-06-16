@@ -1,5 +1,6 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
 import net.md_5.bungee.api.CommandSender;
 
@@ -14,7 +15,7 @@ public class PortyReloadCommand extends BasePortyCommand
 	@Override
 	public String[] getHelpText()
 	{
-		return new String[] { "Reloads the configuration" };
+		return new String[] { Messages.getMessage("reload_help", "&7Reloads the configuration") };
 	}
 
 	@Override
@@ -22,9 +23,9 @@ public class PortyReloadCommand extends BasePortyCommand
 	{
 		if (args.length == 0)
 		{
-			Porty.getInstance().getConfig().reload();
+			Porty.getInstance().reload();
 
-			sendMessage(sender, "The configuration has been reloaded.");
+			sendMessage(sender, Messages.getMessage("reload_done", "&7The configuration has been reloaded"));
 		}
 		else
 		{

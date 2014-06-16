@@ -1,7 +1,8 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
-import net.md_5.bungee.api.ChatColor;
+import me.moehritz.porty.TextUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
@@ -9,11 +10,9 @@ import net.md_5.bungee.api.plugin.Command;
 public abstract class BasePortyCommand extends Command
 {
 
-	public static ChatColor COLOR_HIGHLIGHT = ChatColor.YELLOW, COLOR_TEXT = ChatColor.GRAY;
-
-	public static String PREFIX_MAIN = ChatColor.GREEN + "[TP] " + COLOR_TEXT;
-	public static String PREFIX_HELP = ChatColor.GREEN + "[TP-?] " + COLOR_TEXT;
-	public static String PREFIX_TEXT = ChatColor.GREEN + "> " + COLOR_TEXT;
+	public static String PREFIX_MAIN = Messages.prefixColor + "[TP] ";
+	public static String PREFIX_HELP = Messages.prefixColor + "[TP-?] ";
+	public static String PREFIX_TEXT = Messages.prefixColor + "> ";
 
 	public BasePortyCommand(String name, String permission, String[] aliases)
 	{
@@ -69,12 +68,13 @@ public abstract class BasePortyCommand extends Command
 
 	public void sendWrongUsage(CommandSender sender)
 	{
-		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + "Type '" + COLOR_HIGHLIGHT + "/" + getName() + " help" + COLOR_TEXT + "' to get help."));
+		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + TextUtil.applyTag("<command>", getName(), Messages.getMessage("general_help", "&7Type '&e/<command> help&7' to get help."))[0]));
 	}
 
 	public void sendNoPerm(CommandSender sender, String perm)
 	{
-		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + "You need the permission '" + COLOR_HIGHLIGHT + perm + COLOR_TEXT + "' for this."));
+		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + TextUtil.applyTag("<perm>", getName(), Messages.getMessage("perm_needed", "&7You need the permission '&e<perm>&7' for this."))[0]));
+	}
 	}
 
 }

@@ -5,8 +5,9 @@ import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
+import me.moehritz.porty.TextUtil;
 import me.moehritz.porty.api.CallbackRunnable;
 import me.moehritz.porty.api.GlobalLocation;
 import me.moehritz.porty.api.PortyAPI;
@@ -62,7 +63,7 @@ public class IPortyAPI implements PortyAPI
 			msg.write(timer);
 			msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Don´t move for " + BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
+			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
 
 			timerCallback.setRunnable(new CallbackRunnable()
 			{
@@ -76,7 +77,7 @@ public class IPortyAPI implements PortyAPI
 				@Override
 				public void error(String errmsg)
 				{
-					callback.fail("You moved");
+					callback.fail(Messages.getMessage("timer_fail", "&7You moved"));
 				}
 			});
 		}
@@ -115,7 +116,7 @@ public class IPortyAPI implements PortyAPI
 			msg.write(timer);
 			msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_MAIN + "Do not move for " + BasePortyCommand.COLOR_HIGHLIGHT + timer + BasePortyCommand.COLOR_TEXT + " seconds!"));
+			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
 
 			timerCallback.setRunnable(new CallbackRunnable()
 			{

@@ -1,6 +1,8 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
+import me.moehritz.porty.TextUtil;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 import net.md_5.bungee.api.CommandSender;
@@ -18,8 +20,7 @@ public class TeleportCommand extends BasePortyCommand
 	@Override
 	public String[] getHelpText()
 	{
-		return new String[] { "Teleports a player to a player", "/tp <target> - Teleports the sender",
-				"/tp <player> <target> - Teleports the given player" };
+		return Messages.getMessages("teleport_help");
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class TeleportCommand extends BasePortyCommand
 		{ // /tp <target>
 			if (!(sender instanceof ProxiedPlayer))
 			{
-				sendMessage(sender, "As console, you can teleport other players with /tp <player> <target>");
+				sendMessage(sender, Messages.getMessage("console_warning", "&7You can not use this command as console or comandblocks"));
 				return;
 			}
 
@@ -40,8 +41,7 @@ public class TeleportCommand extends BasePortyCommand
 
 			if (targetPlayer == null)
 			{
-				sendMessage(sender, "Can´t find the player " + BasePortyCommand.COLOR_HIGHLIGHT + targetName
-						+ BasePortyCommand.COLOR_TEXT + ".");
+				sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
 				return;
 			}
 
@@ -52,13 +52,13 @@ public class TeleportCommand extends BasePortyCommand
 				@Override
 				public void success()
 				{
-					sendMessage(sender, "Teleported.");
+					sendMessage(sender, Messages.getMessage("teleport_success", "Teleported."));
 				}
 
 				@Override
 				public void error(String errmsg)
 				{
-					sendMessage(sender, "The teleport failed: " + errmsg);
+					sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
 				}
 			});
 		}
@@ -69,8 +69,7 @@ public class TeleportCommand extends BasePortyCommand
 
 			if (fromPlayer == null)
 			{
-				sendMessage(sender, "Can´t find the player " + BasePortyCommand.COLOR_HIGHLIGHT + fromName
-						+ BasePortyCommand.COLOR_TEXT + ".");
+				sendMessages(sender, TextUtil.applyTag("<player>", fromName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
 				return;
 			}
 
@@ -79,8 +78,7 @@ public class TeleportCommand extends BasePortyCommand
 
 			if (targetPlayer == null)
 			{
-				sendMessage(sender, "Can´t find the player " + BasePortyCommand.COLOR_HIGHLIGHT + targetName
-						+ BasePortyCommand.COLOR_TEXT + ".");
+				sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
 				return;
 			}
 
@@ -91,16 +89,13 @@ public class TeleportCommand extends BasePortyCommand
 				@Override
 				public void success()
 				{
-					sendMessage(fromPlayer, "Teleported.");
-					sendMessage(sender,
-							"Teleported player " + fromPlayer.getDisplayName() + " to " + targetPlayer.getDisplayName()
-									+ ".");
+					sendMessage(sender, Messages.getMessage("teleport_success", "&7Teleported."));
 				}
 
 				@Override
 				public void error(String errmsg)
 				{
-					sendMessage(sender, "The teleport failed: " + errmsg);
+					sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
 				}
 			});
 		}

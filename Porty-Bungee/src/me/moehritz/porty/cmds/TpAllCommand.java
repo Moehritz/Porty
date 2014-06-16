@@ -2,7 +2,9 @@ package me.moehritz.porty.cmds;
 
 import java.util.Collection;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
+import me.moehritz.porty.TextUtil;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 import net.md_5.bungee.api.CommandSender;
@@ -20,8 +22,7 @@ public class TpAllCommand extends BasePortyCommand
 	@Override
 	public String[] getHelpText()
 	{
-		return new String[] { "Teleports all players on this BungeeCord instance", "/tpall - Teleports them to you",
-				"/tp <target> - Teleports them to the given player" };
+		return Messages.getMessages("tpall_help");
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class TpAllCommand extends BasePortyCommand
 		{ // /tpall
 			if (!(sender instanceof ProxiedPlayer))
 			{
-				sendMessage(sender, "Please use /tpall <target> instead!");
+				sendMessage(sender, Messages.getMessage("console_warning", "&7You can not use this command as console or comandblocks"));
 				return;
 			}
 
@@ -57,12 +58,11 @@ public class TpAllCommand extends BasePortyCommand
 					@Override
 					public void error(String errmsg)
 					{
-						sendMessage(sender, "Failed to teleport " + BasePortyCommand.COLOR_HIGHLIGHT + player.getName()
-								+ BasePortyCommand.PREFIX_TEXT + ": " + errmsg);
+						sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
 					}
 				});
 			}
-			sendMessage(sender, "Teleported all players to you.");
+			sendMessage(sender, Messages.getMessage("tpall_success_you", "&7Teleported all players to you"));
 
 		}
 		else if (args.length == 1)
@@ -72,8 +72,7 @@ public class TpAllCommand extends BasePortyCommand
 
 			if (targetPlayer == null)
 			{
-				sendMessage(sender, "Can´t find the player " + BasePortyCommand.COLOR_HIGHLIGHT + targetName
-						+ BasePortyCommand.COLOR_TEXT + ".");
+				sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
 				return;
 			}
 
@@ -97,12 +96,11 @@ public class TpAllCommand extends BasePortyCommand
 					@Override
 					public void error(String errmsg)
 					{
-						sendMessage(sender, "Failed to teleport " + BasePortyCommand.COLOR_HIGHLIGHT + player.getName()
-								+ BasePortyCommand.PREFIX_TEXT + ": " + errmsg);
+						sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
 					}
 				});
 			}
-			sendMessage(sender, "Teleported all players.");
+			sendMessages(sender, TextUtil.applyTag("<player>", targetPlayer.getName(), Messages.getMessage("tpall_success", "&7Teleported all players to &e<player>&7")));
 		}
 		else
 		{

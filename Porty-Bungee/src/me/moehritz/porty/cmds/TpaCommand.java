@@ -1,6 +1,8 @@
 package me.moehritz.porty.cmds;
 
+import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
+import me.moehritz.porty.TextUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -16,8 +18,7 @@ public class TpaCommand extends BasePortyCommand
 	@Override
 	public String[] getHelpText()
 	{
-		return new String[] { "Asks a player to teleport to him",
-				"/tpa <player> - Sends the request, it can be accepted with /tpaccept or denied with /tpdeny" };
+		return Messages.getMessages("tpa_help");
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public class TpaCommand extends BasePortyCommand
 	{
 		if (!(sender instanceof ProxiedPlayer))
 		{
-			sendMessage(sender, "You cannot use the command as console!");
+			sendMessage(sender, Messages.getMessage("console_warning", "&7You can not use this command as console or comandblocks"));
 			return;
 		}
 
@@ -38,16 +39,13 @@ public class TpaCommand extends BasePortyCommand
 
 			if (targetPlayer == null)
 			{
-				sendMessage(sender, "Can´t find the player " + BasePortyCommand.COLOR_HIGHLIGHT + targetName
-						+ BasePortyCommand.COLOR_TEXT + ".");
+				sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
 				return;
 			}
 
 			Porty.getApi().getTeleportRequestHandler().addTpaRequest(fromPlayer, targetPlayer);
-			sendMessage(fromPlayer, "Your request has been sent.");
-			sendMessage(targetPlayer, "The player " + BasePortyCommand.COLOR_HIGHLIGHT + fromPlayer.getDisplayName()
-					+ BasePortyCommand.COLOR_TEXT
-					+ " asks you to teleport to you. Use /tpaccept and /tpdeny to respond to it.");
+			sendMessage(fromPlayer, Messages.getMessage("tpa_request_sent", "Your request has been sent"));
+			sendMessages(targetPlayer, TextUtil.applyTag("<player>", fromPlayer.getName(), Messages.getMessage("tpa", "&7The player &e<player>&7 asks you to teleport to you. Use &e/tpaccept&7 or &e/tpdeny&7 in order to respond to it.")));
 		}
 		else
 		{
