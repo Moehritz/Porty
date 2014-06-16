@@ -1,13 +1,20 @@
 package me.moehritz.porty.cmds;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.TextUtil;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
-public abstract class BasePortyCommand extends Command
+public abstract class BasePortyCommand extends Command implements TabExecutor
 {
 
 	public static String PREFIX_MAIN = Messages.prefixColor + "[TP] ";
@@ -75,6 +82,28 @@ public abstract class BasePortyCommand extends Command
 	{
 		sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + TextUtil.applyTag("<perm>", getName(), Messages.getMessage("perm_needed", "&7You need the permission '&e<perm>&7' for this."))[0]));
 	}
+
+	// https://github.com/SpigotMC/BungeeCord/blob/master/api/src/main/java/net/md_5/bungee/command/PlayerCommand.java
+	// copied because PlayerCommand is for Internal use only (why???)
+	@Override
+	public Iterable<String> onTabComplete(CommandSender sender, String[] args)
+	{
+		final String lastArg = (args.length > 0) ? args[args.length - 1].toLowerCase() : "";
+		return Iterables.transform(Iterables.filter(ProxyServer.getInstance().getPlayers(), new Predicate<ProxiedPlayer>()
+		{
+			@Override
+			public boolean apply(ProxiedPlayer player)
+			{
+				return player.getName().toLowerCase().startsWith(lastArg);
+			}
+		}), new Function<ProxiedPlayer, String>()
+		{
+			@Override
+			public String apply(ProxiedPlayer player)
+			{
+				return player.getName();
+			}
+		});
 	}
 
 }
