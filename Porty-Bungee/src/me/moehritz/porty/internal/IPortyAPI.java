@@ -25,8 +25,27 @@ public class IPortyAPI implements PortyAPI {
     }
 
     public Callback teleport(final ProxiedPlayer player, final ProxiedPlayer to, boolean ignoreTimer) {
-        Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(to);
+        return calcTimer(player, new CallbackAcceptor() {
+            @Override
+            public void accpet(ICallback callback) {
+                executeTeleport(player, to, callback);
+            }
+        }, ignoreTimer);
+    }
+
+    public Callback teleport(final ProxiedPlayer player, final GlobalLocation to, boolean ignoreTimer) {
+        Preconditions.checkNotNull(to);
+        return calcTimer(player, new CallbackAcceptor() {
+            @Override
+            public void accpet(ICallback callback) {
+                executeTeleport(player, to, callback);
+            }
+        }, ignoreTimer);
+    }
+
+    private ICallback calcTimer(final ProxiedPlayer player, final CallbackAcceptor doTeleport, boolean ignoreTimer) {
+        Preconditions.checkNotNull(player);
 
         int timer = 0;
         if (!ignoreTimer) {
@@ -35,8 +54,9 @@ public class IPortyAPI implements PortyAPI {
 
         final ICallback callback = new ICallback(player);
         getTaskHandler().addRunningTask(callback);
+
         if (timer <= 0) {
-            executeTeleport(player, to, callback);
+            doTeleport.accpet(callback);
         } else {
             ICallback timerCallback = new ICallback(player);
             getTaskHandler().addRunningTask(timerCallback);
@@ -52,59 +72,14 @@ public class IPortyAPI implements PortyAPI {
             player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
 
             timerCallback.setRunnable(new CallbackRunnable() {
-
                 @Override
                 public void success() {
-                    executeTeleport(player, to, callback);
+                    doTeleport.accpet(callback);
                 }
 
                 @Override
                 public void error(String errmsg) {
                     callback.fail(Messages.getMessage("timer_fail", "&7You moved"));
-                }
-            });
-        }
-
-        return callback;
-    }
-
-    public Callback teleport(final ProxiedPlayer player, final GlobalLocation to, boolean ignoreTimer) {
-        Preconditions.checkNotNull(player);
-        Preconditions.checkNotNull(to);
-
-        int timer = 0;
-        if (!ignoreTimer) {
-            timer = Porty.getInstance().getTimer().getTimeToWait(player);
-        }
-
-        final ICallback callback = new ICallback(player);
-        getTaskHandler().addRunningTask(callback);
-
-        if (timer <= 0) {
-            executeTeleport(player, to, callback);
-        } else {
-            ICallback timerCallback = new ICallback(player);
-            getTaskHandler().addRunningTask(timerCallback);
-
-            OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
-            msg.setCallback(timerCallback);
-            timerCallback.setExtraTime(timer);
-            msg.write(timerCallback.getUniqueID());
-            msg.write(player.getName());
-            msg.write(timer);
-            msg.send();
-
-            player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
-
-            timerCallback.setRunnable(new CallbackRunnable() {
-                @Override
-                public void success() {
-                    executeTeleport(player, to, callback);
-                }
-
-                @Override
-                public void error(String errmsg) {
-                    callback.fail("You moved");
                 }
             });
         }
@@ -148,6 +123,10 @@ public class IPortyAPI implements PortyAPI {
 
     public TaskHandler getTaskHandler() {
         return Porty.getInstance().getTaskHandler();
+    }
+
+    private interface CallbackAcceptor {
+        void accpet(ICallback callback);
     }
 
 }
