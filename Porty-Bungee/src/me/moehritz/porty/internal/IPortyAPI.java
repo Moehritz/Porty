@@ -3,7 +3,7 @@ package me.moehritz.porty.internal;
 import com.google.common.base.Preconditions;
 import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
-import me.moehritz.porty.TextUtil;
+import me.moehritz.porty.PortyUtil;
 import me.moehritz.porty.api.*;
 import me.moehritz.porty.cmds.BasePortyCommand;
 import me.moehritz.porty.internal.io.IOStatics;
@@ -69,7 +69,7 @@ public class IPortyAPI implements PortyAPI {
             msg.write(timer);
             msg.send();
 
-            player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
+            player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + PortyUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
 
             timerCallback.setRunnable(new CallbackRunnable() {
                 @Override

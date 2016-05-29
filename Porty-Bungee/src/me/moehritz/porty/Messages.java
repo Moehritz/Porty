@@ -7,9 +7,7 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class Messages {
 
@@ -26,14 +24,14 @@ public class Messages {
         if (cfg == null) {
             reload();
         }
-        return TextUtil.applyColors(cfg.getString(id, def))[0];
+        return PortyUtil.applyColors(cfg.getString(id, def))[0];
     }
 
     public static String[] getMessages(String id) {
         if (cfg == null) {
             reload();
         }
-        return TextUtil.applyColors((String[]) cfg.getStringList(id).toArray(new String[0]));
+        return PortyUtil.applyColors((String[]) cfg.getStringList(id).toArray(new String[0]));
     }
 
     public static void reload() {
@@ -53,28 +51,15 @@ public class Messages {
 
         cfg = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 
-        prefixColor = ChatColor.translateAlternateColorCodes('&', cfg.getString("prefixColor"));
-        BasePortyCommand.PREFIX_MAIN = prefixColor + "[TP] ";
-        BasePortyCommand.PREFIX_HELP = prefixColor + "[TP-?] ";
-        BasePortyCommand.PREFIX_TEXT = prefixColor + "> ";
+        prefixColor = ChatColor.translateAlternateColorCodes('&', cfg.getString("prefixColor", prefixColor));
+        BasePortyCommand.PREFIX_MAIN = prefixColor + cfg.getString("prefixMain","[TP] ");
+        BasePortyCommand.PREFIX_HELP = prefixColor + cfg.getString("prefixHelp","[TP-?] ");
+        BasePortyCommand.PREFIX_TEXT = prefixColor + cfg.getString("prefixText","> ");
     }
 
     public static void saveDefaultValues(File file) throws IOException {
         file.createNewFile();
 
-        InputStream in = Messages.class.getClassLoader().getResourceAsStream("messages.yml");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            int r = in.read();
-            while (r != -1) {
-                fos.write(r);
-                r = in.read();
-            }
-        } finally {
-            if (fos != null) {
-                fos.close();
-            }
-        }
+        PortyUtil.writeDefaultFile("messages", file);
     }
 }

@@ -8,9 +8,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 import net.md_5.bungee.util.CaseInsensitiveMap;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 public class PortyConfiguration {
@@ -52,20 +50,7 @@ public class PortyConfiguration {
     public void saveDefaultValues(File file) throws IOException {
         file.createNewFile();
 
-        InputStream in = getClass().getClassLoader().getResourceAsStream("config.yml");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            int r = in.read();
-            while (r != -1) {
-                fos.write(r);
-                r = in.read();
-            }
-        } finally {
-            if (fos != null) {
-                fos.close();
-            }
-        }
+        PortyUtil.writeDefaultFile("config", file);
     }
 
     public Map<String, Integer> getServerTeleportTimer() {

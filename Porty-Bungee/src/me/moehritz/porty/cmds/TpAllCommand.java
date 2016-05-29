@@ -2,7 +2,7 @@ package me.moehritz.porty.cmds;
 
 import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
-import me.moehritz.porty.TextUtil;
+import me.moehritz.porty.PortyUtil;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 import net.md_5.bungee.api.CommandSender;
@@ -47,7 +47,7 @@ public class TpAllCommand extends BasePortyCommand {
 
                     @Override
                     public void error(String errmsg) {
-                        sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
+                        sendMessages(sender, PortyUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
                     }
                 });
             }
@@ -58,7 +58,7 @@ public class TpAllCommand extends BasePortyCommand {
             final ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(targetName);
 
             if (targetPlayer == null) {
-                sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
+                sendMessages(sender, PortyUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
                 return;
             }
 
@@ -77,11 +77,11 @@ public class TpAllCommand extends BasePortyCommand {
 
                     @Override
                     public void error(String errmsg) {
-                        sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
+                        sendMessages(sender, PortyUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
                     }
                 });
             }
-            sendMessages(sender, TextUtil.applyTag("<player>", targetPlayer.getName(), Messages.getMessage("tpall_success", "&7Teleported all players to &e<player>&7")));
+            sendMessages(sender, PortyUtil.applyTag("<player>", targetPlayer.getName(), Messages.getMessage("tpall_success", "&7Teleported all players to &e<player>&7")));
         } else {
             sendWrongUsage(sender);
         }

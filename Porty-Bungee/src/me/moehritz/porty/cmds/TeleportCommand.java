@@ -2,7 +2,7 @@ package me.moehritz.porty.cmds;
 
 import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
-import me.moehritz.porty.TextUtil;
+import me.moehritz.porty.PortyUtil;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
 import net.md_5.bungee.api.CommandSender;
@@ -34,7 +34,7 @@ public class TeleportCommand extends BasePortyCommand {
             ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(targetName);
 
             if (targetPlayer == null) {
-                sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
+                sendMessages(sender, PortyUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
                 return;
             }
 
@@ -48,7 +48,7 @@ public class TeleportCommand extends BasePortyCommand {
 
                 @Override
                 public void error(String errmsg) {
-                    sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
+                    sendMessages(sender, PortyUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
                 }
             });
         } else if (args.length == 2) { // /tp <player> <target>
@@ -56,7 +56,7 @@ public class TeleportCommand extends BasePortyCommand {
             final ProxiedPlayer fromPlayer = ProxyServer.getInstance().getPlayer(fromName);
 
             if (fromPlayer == null) {
-                sendMessages(sender, TextUtil.applyTag("<player>", fromName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
+                sendMessages(sender, PortyUtil.applyTag("<player>", fromName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
                 return;
             }
 
@@ -64,7 +64,7 @@ public class TeleportCommand extends BasePortyCommand {
             final ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(fromName);
 
             if (targetPlayer == null) {
-                sendMessages(sender, TextUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
+                sendMessages(sender, PortyUtil.applyTag("<player>", targetName, Messages.getMessage("player_not_found", "&7Can´t find the player &e<player>&7.")));
                 return;
             }
 
@@ -78,7 +78,7 @@ public class TeleportCommand extends BasePortyCommand {
 
                 @Override
                 public void error(String errmsg) {
-                    sendMessages(sender, TextUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
+                    sendMessages(sender, PortyUtil.applyTag("<errmsg>", errmsg, Messages.getMessage("teleport_fail", "&7The teleport failed: <errmsg>")));
                 }
             });
         } else {

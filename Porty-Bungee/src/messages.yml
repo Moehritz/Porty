@@ -1,4 +1,7 @@
 prefixColor: "&a"
+prefixMain: "[TP] "
+prefixHelp: "[TP-?] "
+prefixText: "> "
 
 reload_help: "&7Reloads the configuration"
 reload_done: "&7The configuration has been reloaded"

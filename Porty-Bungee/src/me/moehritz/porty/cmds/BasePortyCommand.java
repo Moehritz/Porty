@@ -5,7 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
-import me.moehritz.porty.TextUtil;
+import me.moehritz.porty.PortyUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -63,11 +63,11 @@ public abstract class BasePortyCommand extends Command implements TabExecutor {
     }
 
     public void sendWrongUsage(CommandSender sender) {
-        sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + TextUtil.applyTag("<command>", getName(), Messages.getMessage("general_help", "&7Type '&e/<command> help&7' to get help."))[0]));
+        sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + PortyUtil.applyTag("<command>", getName(), Messages.getMessage("general_help", "&7Type '&e/<command> help&7' to get help."))[0]));
     }
 
     public void sendNoPerm(CommandSender sender, String perm) {
-        sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + TextUtil.applyTag("<perm>", perm, Messages.getMessage("perm_needed", "&7You need the permission '&e<perm>&7' for this."))[0]));
+        sender.sendMessage(TextComponent.fromLegacyText(PREFIX_MAIN + PortyUtil.applyTag("<perm>", perm, Messages.getMessage("perm_needed", "&7You need the permission '&e<perm>&7' for this."))[0]));
     }
 
     // https://github.com/SpigotMC/BungeeCord/blob/master/api/src/main/java/net/md_5/bungee/command/PlayerCommand.java
