@@ -1,6 +1,5 @@
 package me.moehritz.porty;
 
-import lombok.Getter;
 import me.moehritz.porty.internal.PlayerListener;
 import me.moehritz.porty.internal.TeleportScheduler;
 import me.moehritz.porty.internal.TeleportTimer;
@@ -16,9 +15,7 @@ public class Porty extends JavaPlugin {
         return instance;
     }
 
-    @Getter
     private TeleportScheduler teleportScheduler;
-    @Getter
     private TeleportTimer teleportTimer;
 
     @Override
@@ -34,4 +31,11 @@ public class Porty extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
     }
 
+    public TeleportScheduler getTeleportScheduler() {
+        return teleportScheduler;
+    }
+
+    public TeleportTimer getTeleportTimer() {
+        return teleportTimer;
+    }
 }

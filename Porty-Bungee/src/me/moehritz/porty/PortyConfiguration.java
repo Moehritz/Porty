@@ -1,6 +1,5 @@
 package me.moehritz.porty;
 
-import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-@Getter
 public class PortyConfiguration {
     private int globalTeleportTimer;
     private int timeout;
@@ -68,5 +66,21 @@ public class PortyConfiguration {
                 fos.close();
             }
         }
+    }
+
+    public Map<String, Integer> getServerTeleportTimer() {
+        return serverTeleportTimer;
+    }
+
+    public int getGlobalTeleportTimer() {
+        return globalTeleportTimer;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public String getCommandPrefix() {
+        return commandPrefix;
     }
 }

@@ -1,6 +1,5 @@
 package me.moehritz.porty.internal;
 
-import lombok.Setter;
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
@@ -17,7 +16,6 @@ public class ICallback implements Callback {
     private CallbackRunnable runnnable;
     private ScheduledTask timeoutCheck;
     private int uid;
-    @Setter
     private int extraTime;
 
     public ICallback(ProxiedPlayer player) {
@@ -37,6 +35,10 @@ public class ICallback implements Callback {
     @Override
     public ProxiedPlayer getPlayer() {
         return player;
+    }
+
+    public void setExtraTime(int extraTime) {
+        this.extraTime = extraTime;
     }
 
     public void timeout() {
