@@ -21,7 +21,7 @@ tpa: "&7The player &e<player>&7 asks you to teleport to you. Use &e/tpaccept&7 o
 tpahere_help: ["&7Asks a player to teleport to you","&7/tpa <player> - Sends the request, it can be accepted with /tpaccept or denied with /tpdeny"]
 tpahere: "&7The player &e<player> &7asks you to teleport to him. Use &e/tpaccept&7 or &e/tpdeny&7 in order to respond to it"
 player_not_found: "&7Can not find the player &e<player>"
-console_warning: "&7You can not use this command as console or comandblocks"
+console_warning: "&7You can not use this command as console or commandblocks"
 teleport_cooldown: "&7Do not move for &e<time> &7seconds!"
 timer_fail: "&7You moved"
 general_help: "&7Type '&e/<command> help&7' to get help."
