@@ -1,108 +1,96 @@
 package me.moehritz.porty.internal.io;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.GlobalLocation;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-public class InputHandler implements PluginMessageListener
-{
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 
-	@Override
-	public void onPluginMessageReceived(String ch, Player p, byte[] msg)
-	{
-		if (!ch.equals(IOStatics.CHANNEL)) return;
+public class InputHandler implements PluginMessageListener {
 
-		DataInputStream in = new DataInputStream(new ByteArrayInputStream(msg));
+    @Override
+    public void onPluginMessageReceived(String ch, Player p, byte[] msg) {
+        if (!ch.equals(IOStatics.CHANNEL)) return;
 
-		try
-		{
-			byte type = in.readByte();
-			int uid = in.readInt();
-			switch (type)
-			{
-			case IOStatics.CALLBACK:
-				// Impossible atm
-				break;
-			case IOStatics.TP_TO_LOCATION:
-				prepareLocationTeleport(uid, in);
-				break;
-			case IOStatics.TP_TO_PLAYER:
-				preparePlayerTeleport(uid, in);
-				break;
-			case IOStatics.TP_TIMER:
-				teleportTimer(uid, in);
-				break;
-			}
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(msg));
 
-			in.close();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
+        try {
+            byte type = in.readByte();
+            int uid = in.readInt();
+            switch (type) {
+                case IOStatics.CALLBACK:
+                    // Impossible atm
+                    break;
+                case IOStatics.TP_TO_LOCATION:
+                    prepareLocationTeleport(uid, in);
+                    break;
+                case IOStatics.TP_TO_PLAYER:
+                    preparePlayerTeleport(uid, in);
+                    break;
+                case IOStatics.TP_TIMER:
+                    teleportTimer(uid, in);
+                    break;
+            }
 
-	private void prepareLocationTeleport(int uid, DataInputStream data) throws IOException
-	{
-		String p = data.readUTF();
-		String server = data.readUTF();
-		String world = data.readUTF();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		double x = data.readDouble();
-		double y = data.readDouble();
-		double z = data.readDouble();
+    private void prepareLocationTeleport(int uid, DataInputStream data) throws IOException {
+        String p = data.readUTF();
+        String server = data.readUTF();
+        String world = data.readUTF();
 
-		float yaw = data.readFloat();
-		float pitch = data.readFloat();
+        double x = data.readDouble();
+        double y = data.readDouble();
+        double z = data.readDouble();
 
-		GlobalLocation loc = new GlobalLocation(x, y, z, yaw, pitch, world, server);
+        float yaw = data.readFloat();
+        float pitch = data.readFloat();
 
-		OfflinePlayer player = Bukkit.getOfflinePlayer(p);
+        GlobalLocation loc = new GlobalLocation(x, y, z, yaw, pitch, world, server);
 
-		Porty.getInstance().getTeleportScheduler().scheduleTeleport(player, loc, uid);
-	}
+        OfflinePlayer player = Bukkit.getOfflinePlayer(p);
 
-	private void preparePlayerTeleport(int uid, DataInputStream data) throws IOException
-	{
-		String p = data.readUTF();
-		String t = data.readUTF();
+        Porty.getInstance().getTeleportScheduler().scheduleTeleport(player, loc, uid);
+    }
 
-		Player target = Bukkit.getPlayer(t);
+    private void preparePlayerTeleport(int uid, DataInputStream data) throws IOException {
+        String p = data.readUTF();
+        String t = data.readUTF();
 
-		if (target == null)
-		{
-			CallbackSender.sendCallback(uid, 1);
-			return;
-		}
+        Player target = Bukkit.getPlayer(t);
 
-		GlobalLocation loc = new GlobalLocation(target);
+        if (target == null) {
+            CallbackSender.sendCallback(uid, 1);
+            return;
+        }
 
-		OfflinePlayer player = Bukkit.getOfflinePlayer(p);
+        GlobalLocation loc = new GlobalLocation(target);
 
-		Porty.getInstance().getTeleportScheduler().scheduleTeleport(player, loc, uid);
-	}
+        OfflinePlayer player = Bukkit.getOfflinePlayer(p);
 
-	private void teleportTimer(int uid, DataInputStream data) throws IOException
-	{
-		String p = data.readUTF();
-		int time = data.readInt();
+        Porty.getInstance().getTeleportScheduler().scheduleTeleport(player, loc, uid);
+    }
 
-		Player player = Bukkit.getPlayer(p);
+    private void teleportTimer(int uid, DataInputStream data) throws IOException {
+        String p = data.readUTF();
+        int time = data.readInt();
 
-		if (player == null)
-		{
-			CallbackSender.sendCallback(uid, 1);
-			return;
-		}
-		Porty.getInstance().getTeleportTimer().addTimer(uid, player, time);
+        Player player = Bukkit.getPlayer(p);
 
-	}
+        if (player == null) {
+            CallbackSender.sendCallback(uid, 1);
+            return;
+        }
+        Porty.getInstance().getTeleportTimer().addTimer(uid, player, time);
+
+    }
 }

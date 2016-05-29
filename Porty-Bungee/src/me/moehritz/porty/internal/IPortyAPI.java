@@ -1,185 +1,153 @@
 package me.moehritz.porty.internal;
 
 import com.google.common.base.Preconditions;
-
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import me.moehritz.porty.Messages;
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.TextUtil;
-import me.moehritz.porty.api.CallbackRunnable;
-import me.moehritz.porty.api.GlobalLocation;
-import me.moehritz.porty.api.PortyAPI;
-import me.moehritz.porty.api.Callback;
-import me.moehritz.porty.api.TaskHandler;
-import me.moehritz.porty.api.TeleportRequestHandler;
+import me.moehritz.porty.api.*;
 import me.moehritz.porty.cmds.BasePortyCommand;
 import me.moehritz.porty.internal.io.IOStatics;
 import me.moehritz.porty.internal.io.OutgoingPluginMessage;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class IPortyAPI implements PortyAPI
-{
+public class IPortyAPI implements PortyAPI {
 
-	@Override
-	public Callback teleport(ProxiedPlayer player, ProxiedPlayer to)
-	{
-		return teleport(player, to, false);
-	}
+    @Override
+    public Callback teleport(ProxiedPlayer player, ProxiedPlayer to) {
+        return teleport(player, to, false);
+    }
 
-	@Override
-	public Callback teleport(ProxiedPlayer player, GlobalLocation to)
-	{
-		return teleport(player, to, false);
-	}
+    @Override
+    public Callback teleport(ProxiedPlayer player, GlobalLocation to) {
+        return teleport(player, to, false);
+    }
 
-	public Callback teleport(final ProxiedPlayer player, final ProxiedPlayer to, boolean ignoreTimer)
-	{
-		Preconditions.checkNotNull(player);
-		Preconditions.checkNotNull(to);
+    public Callback teleport(final ProxiedPlayer player, final ProxiedPlayer to, boolean ignoreTimer) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(to);
 
-		int timer = 0;
-		if (!ignoreTimer)
-		{
-			timer = Porty.getInstance().getTimer().getTimeToWait(player);
-		}
+        int timer = 0;
+        if (!ignoreTimer) {
+            timer = Porty.getInstance().getTimer().getTimeToWait(player);
+        }
 
-		final ICallback callback = new ICallback(player);
-		getTaskHandler().addRunningTask(callback);
-		if (timer <= 0 || ignoreTimer)
-		{
-			executeTeleport(player, to, callback);
-		}
-		else
-		{
-			ICallback timerCallback = new ICallback(player);
-			getTaskHandler().addRunningTask(timerCallback);
+        final ICallback callback = new ICallback(player);
+        getTaskHandler().addRunningTask(callback);
+        if (timer <= 0) {
+            executeTeleport(player, to, callback);
+        } else {
+            ICallback timerCallback = new ICallback(player);
+            getTaskHandler().addRunningTask(timerCallback);
 
-			OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
-			msg.setCallback(timerCallback);
-			timerCallback.setExtraTime(timer);
-			msg.write(timerCallback.getUniqueID());
-			msg.write(player.getName());
-			msg.write(timer);
-			msg.send();
+            OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
+            msg.setCallback(timerCallback);
+            timerCallback.setExtraTime(timer);
+            msg.write(timerCallback.getUniqueID());
+            msg.write(player.getName());
+            msg.write(timer);
+            msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
+            player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
 
-			timerCallback.setRunnable(new CallbackRunnable()
-			{
+            timerCallback.setRunnable(new CallbackRunnable() {
 
-				@Override
-				public void success()
-				{
-					executeTeleport(player, to, callback);
-				}
+                @Override
+                public void success() {
+                    executeTeleport(player, to, callback);
+                }
 
-				@Override
-				public void error(String errmsg)
-				{
-					callback.fail(Messages.getMessage("timer_fail", "&7You moved"));
-				}
-			});
-		}
+                @Override
+                public void error(String errmsg) {
+                    callback.fail(Messages.getMessage("timer_fail", "&7You moved"));
+                }
+            });
+        }
 
-		return callback;
-	}
+        return callback;
+    }
 
-	public Callback teleport(final ProxiedPlayer player, final GlobalLocation to, boolean ignoreTimer)
-	{
-		Preconditions.checkNotNull(player);
-		Preconditions.checkNotNull(to);
+    public Callback teleport(final ProxiedPlayer player, final GlobalLocation to, boolean ignoreTimer) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(to);
 
-		int timer = 0;
-		if (!ignoreTimer)
-		{
-			timer = Porty.getInstance().getTimer().getTimeToWait(player);
-		}
+        int timer = 0;
+        if (!ignoreTimer) {
+            timer = Porty.getInstance().getTimer().getTimeToWait(player);
+        }
 
-		final ICallback callback = new ICallback(player);
-		getTaskHandler().addRunningTask(callback);
+        final ICallback callback = new ICallback(player);
+        getTaskHandler().addRunningTask(callback);
 
-		if (timer <= 0 || ignoreTimer)
-		{
-			executeTeleport(player, to, callback);
-		}
-		else
-		{
-			ICallback timerCallback = new ICallback(player);
-			getTaskHandler().addRunningTask(timerCallback);
+        if (timer <= 0) {
+            executeTeleport(player, to, callback);
+        } else {
+            ICallback timerCallback = new ICallback(player);
+            getTaskHandler().addRunningTask(timerCallback);
 
-			OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
-			msg.setCallback(timerCallback);
-			timerCallback.setExtraTime(timer);
-			msg.write(timerCallback.getUniqueID());
-			msg.write(player.getName());
-			msg.write(timer);
-			msg.send();
+            OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TIMER, player.getServer().getInfo());
+            msg.setCallback(timerCallback);
+            timerCallback.setExtraTime(timer);
+            msg.write(timerCallback.getUniqueID());
+            msg.write(player.getName());
+            msg.write(timer);
+            msg.send();
 
-			player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
+            player.sendMessage(TextComponent.fromLegacyText(BasePortyCommand.PREFIX_TEXT + TextUtil.applyTag("<time>", timer + "", Messages.getMessage("teleport_cooldown", "&7Do not move for &e<time> &7seconds!"))[0]));
 
-			timerCallback.setRunnable(new CallbackRunnable()
-			{
+            timerCallback.setRunnable(new CallbackRunnable() {
+                @Override
+                public void success() {
+                    executeTeleport(player, to, callback);
+                }
 
-				@Override
-				public void success()
-				{
-					executeTeleport(player, to, callback);
-				}
+                @Override
+                public void error(String errmsg) {
+                    callback.fail("You moved");
+                }
+            });
+        }
 
-				@Override
-				public void error(String errmsg)
-				{
-					callback.fail("You moved");
-				}
-			});
-		}
+        return callback;
+    }
 
-		return callback;
-	}
+    private void silentServerSwitch(ProxiedPlayer player, ServerInfo server) {
+        if (!player.getServer().getInfo().equals(server)) {
+            player.connect(server);
+        }
+    }
 
-	private void silentServerSwitch(ProxiedPlayer player, ServerInfo server)
-	{
-		if (!player.getServer().getInfo().equals(server))
-		{
-			player.connect(server);
-		}
-	}
+    private void executeTeleport(ProxiedPlayer player, GlobalLocation to, ICallback callback) {
+        silentServerSwitch(player, to.getServerInfo());
 
-	private void executeTeleport(ProxiedPlayer player, GlobalLocation to, ICallback callback)
-	{
-		silentServerSwitch(player, to.getServerInfo());
+        OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServerInfo());
+        msg.setCallback(callback);
+        msg.write(callback.getUniqueID());
+        msg.write(player.getName());
+        msg.write(to.getServer()).write(to.getWorld()).write(to.getX()).write(to.getY()).write(to.getZ());
+        msg.write(to.getYaw()).write(to.getPitch());
+        msg.send();
+    }
 
-		OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_LOCATION, to.getServerInfo());
-		msg.setCallback(callback);
-		msg.write(callback.getUniqueID());
-		msg.write(player.getName());
-		msg.write(to.getServer()).write(to.getWorld()).write(to.getX()).write(to.getY()).write(to.getZ());
-		msg.write(to.getYaw()).write(to.getPitch());
-		msg.send();
-	}
+    private void executeTeleport(ProxiedPlayer player, ProxiedPlayer to, ICallback callback) {
+        silentServerSwitch(player, to.getServer().getInfo());
 
-	private void executeTeleport(ProxiedPlayer player, ProxiedPlayer to, ICallback callback)
-	{
-		silentServerSwitch(player, to.getServer().getInfo());
+        OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_PLAYER, to.getServer().getInfo());
+        msg.setCallback(callback);
+        msg.write(callback.getUniqueID());
+        msg.write(player.getName());
+        msg.write(to.getName());
+        msg.send();
+    }
 
-		OutgoingPluginMessage msg = new OutgoingPluginMessage(IOStatics.TP_TO_PLAYER, to.getServer().getInfo());
-		msg.setCallback(callback);
-		msg.write(callback.getUniqueID());
-		msg.write(player.getName());
-		msg.write(to.getName());
-		msg.send();
-	}
+    @Override
+    public TeleportRequestHandler getTeleportRequestHandler() {
+        return Porty.getInstance().getTpaHandler();
+    }
 
-	@Override
-	public TeleportRequestHandler getTeleportRequestHandler()
-	{
-		return Porty.getInstance().getTpaHandler();
-	}
-
-	public TaskHandler getTaskHandler()
-	{
-		return Porty.getInstance().getTaskHandler();
-	}
+    public TaskHandler getTaskHandler() {
+        return Porty.getInstance().getTaskHandler();
+    }
 
 }

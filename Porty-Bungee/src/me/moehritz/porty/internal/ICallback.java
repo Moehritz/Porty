@@ -1,136 +1,113 @@
 package me.moehritz.porty.internal;
 
-import java.util.concurrent.TimeUnit;
-
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.scheduler.ScheduledTask;
 import lombok.Setter;
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.Callback;
 import me.moehritz.porty.api.CallbackRunnable;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.scheduler.ScheduledTask;
 
-public class ICallback implements Callback
-{
+import java.util.concurrent.TimeUnit;
 
-	private ProxiedPlayer player;
-	private State state;
-	private CallbackRunnable runnnable;
-	private ScheduledTask timeoutCheck;
-	private int uid;
-	@Setter
-	private int extraTime;
+public class ICallback implements Callback {
 
-	public ICallback(ProxiedPlayer player)
-	{
-		this.player = player;
-		setUniqueID();
-	}
+    private final ProxiedPlayer player;
+    private State state;
+    private CallbackRunnable runnnable;
+    private ScheduledTask timeoutCheck;
+    private int uid;
+    @Setter
+    private int extraTime;
 
-	private void setUniqueID()
-	{
-		this.uid = Porty.getInstance().getTaskHandler().requestNewID();
-	}
+    public ICallback(ProxiedPlayer player) {
+        this.player = player;
+        setUniqueID();
+    }
 
-	@Override
-	public State getState()
-	{
-		return state;
-	}
+    private void setUniqueID() {
+        this.uid = Porty.getInstance().getTaskHandler().requestNewID();
+    }
 
-	@Override
-	public ProxiedPlayer getPlayer()
-	{
-		return player;
-	}
+    @Override
+    public State getState() {
+        return state;
+    }
 
-	public void timeout()
-	{
-		state = State.TIMEOUT;
-		run(false);
-	}
+    @Override
+    public ProxiedPlayer getPlayer() {
+        return player;
+    }
 
-	public void success()
-	{
-		state = State.SUCCESS;
-		run(true);
-	}
+    public void timeout() {
+        state = State.TIMEOUT;
+        run(false);
+    }
 
-	public void fail(String helpmsg)
-	{
-		state = State.ERROR;
-		run(false, helpmsg);
-	}
+    public void success() {
+        state = State.SUCCESS;
+        run(true);
+    }
 
-	public void start()
-	{
-		state = State.WAITING;
-		timeoutCheck = ProxyServer.getInstance().getScheduler().schedule(Porty.getInstance(), new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				timeout();
-			}
-		}, Porty.getInstance().getConfig().getTimeout() + extraTime, TimeUnit.SECONDS);
-	}
+    public void fail(String helpmsg) {
+        state = State.ERROR;
+        run(false, helpmsg);
+    }
 
-	public void weirdThingsAreGoingOn()
-	{
-		state = State.SOMETHING_WEIRD_HAPPENED;
-		run(false);
-	}
+    public void start() {
+        state = State.WAITING;
+        timeoutCheck = ProxyServer.getInstance().getScheduler().schedule(Porty.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                timeout();
+            }
+        }, Porty.getInstance().getConfig().getTimeout() + extraTime, TimeUnit.SECONDS);
+    }
 
-	private void run(boolean success)
-	{
-		run(success, null);
-	}
+    public void weirdThingsAreGoingOn() {
+        state = State.SOMETHING_WEIRD_HAPPENED;
+        run(false);
+    }
 
-	private void run(boolean success, String helpmsg)
-	{
-		if (timeoutCheck != null) timeoutCheck.cancel();
+    private void run(boolean success) {
+        run(success, null);
+    }
 
-		if (runnnable != null)
-		{
-			if (success)
-			{
-				runnnable.success();
-			}
-			else if (helpmsg != null)
-			{
-				runnnable.error(helpmsg);
-			}
-			else
-			{
-				String errmsg = "Unknown Error.";
-				switch (state)
-				{
-				case ERROR:
-					errmsg = "Teleport failed.";
-					break;
-				case SOMETHING_WEIRD_HAPPENED:
-					errmsg = "Something really weird happened to this action. Please contact the dev.";
-					break;
-				case TIMEOUT:
-					errmsg = "The Pluginmessage to one of your Bukkit servers timed out.";
-					break;
-				default:
-					break;
-				}
-				runnnable.error(errmsg);
-			}
-		}
-	}
+    private void run(boolean success, String helpmsg) {
+        if (timeoutCheck != null) timeoutCheck.cancel();
 
-	@Override
-	public void setRunnable(CallbackRunnable run)
-	{
-		this.runnnable = run;
-	}
+        if (runnnable != null) {
+            if (success) {
+                runnnable.success();
+            } else if (helpmsg != null) {
+                runnnable.error(helpmsg);
+            } else {
+                String errmsg = "Unknown Error.";
+                switch (state) {
+                    case ERROR:
+                        errmsg = "Teleport failed.";
+                        break;
+                    case SOMETHING_WEIRD_HAPPENED:
+                        errmsg = "Something really weird happened to this action. Please contact the dev.";
+                        break;
+                    case TIMEOUT:
+                        errmsg = "The Pluginmessage to one of your Bukkit servers timed out.";
+                        break;
+                    default:
+                        break;
+                }
+                runnnable.error(errmsg);
+            }
+        }
+    }
 
-	@Override
-	public int getUniqueID()
-	{
-		return uid;
-	}
+    @Override
+    public void setRunnable(CallbackRunnable run) {
+        this.runnnable = run;
+    }
+
+    @Override
+    public int getUniqueID() {
+        return uid;
+    }
 }

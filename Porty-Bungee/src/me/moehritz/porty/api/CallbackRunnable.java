@@ -1,10 +1,9 @@
 package me.moehritz.porty.api;
 
-public interface CallbackRunnable
-{
+public interface CallbackRunnable {
 
-	public void success();
+    void success();
 
-	public void error(String errmsg);
+    void error(String errmsg);
 
 }

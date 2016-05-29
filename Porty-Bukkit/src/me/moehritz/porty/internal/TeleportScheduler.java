@@ -1,12 +1,8 @@
 package me.moehritz.porty.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.api.GlobalLocation;
 import me.moehritz.porty.internal.io.CallbackSender;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -14,59 +10,52 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class TeleportScheduler implements Listener
-{
+import java.util.HashMap;
+import java.util.Map;
 
-	private Map<OfflinePlayer, GlobalLocation> scheduledTeleports = new HashMap<OfflinePlayer, GlobalLocation>();
-	private Map<OfflinePlayer, Integer> scheduledTeleportUids = new HashMap<OfflinePlayer, Integer>();
+public class TeleportScheduler implements Listener {
 
-	public TeleportScheduler()
-	{
-		Bukkit.getPluginManager().registerEvents(this, Porty.getInstance());
-	}
+    private final Map<OfflinePlayer, GlobalLocation> scheduledTeleports = new HashMap<OfflinePlayer, GlobalLocation>();
+    private final Map<OfflinePlayer, Integer> scheduledTeleportUids = new HashMap<OfflinePlayer, Integer>();
 
-	public void scheduleTeleport(OfflinePlayer player, GlobalLocation loc, int uid)
-	{
-		if (player.isOnline())
-		{
-			player.getPlayer().teleport(loc.toBukkitLocation());
+    public TeleportScheduler() {
+        Bukkit.getPluginManager().registerEvents(this, Porty.getInstance());
+    }
 
-			CallbackSender.sendCallback(uid, 0);
-			return;
-		}
+    public void scheduleTeleport(OfflinePlayer player, GlobalLocation loc, int uid) {
+        if (player.isOnline()) {
+            player.getPlayer().teleport(loc.toBukkitLocation());
 
-		if (scheduledTeleports.containsKey(player))
-		{
-			scheduledTeleports.remove(player);
-			scheduledTeleportUids.remove(player);
-		}
+            CallbackSender.sendCallback(uid, 0);
+            return;
+        }
 
-		scheduledTeleports.put(player, loc);
-		scheduledTeleportUids.put(player, uid);
-	}
+        if (scheduledTeleports.containsKey(player)) {
+            scheduledTeleports.remove(player);
+            scheduledTeleportUids.remove(player);
+        }
 
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event)
-	{
-		Player player = event.getPlayer();
-		if (scheduledTeleports.containsKey(player))
-		{
-			try
-			{
-				GlobalLocation loc = scheduledTeleports.get(player);
+        scheduledTeleports.put(player, loc);
+        scheduledTeleportUids.put(player, uid);
+    }
 
-				event.getPlayer().teleport(loc.toBukkitLocation());
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (scheduledTeleports.containsKey(player)) {
+            try {
+                GlobalLocation loc = scheduledTeleports.get(player);
 
-				CallbackSender.sendCallback(scheduledTeleportUids.get(player), 0);
-			}
-			catch (Exception ex)
-			{
-				// Occurs if the target World is null
-				CallbackSender.sendCallback(scheduledTeleportUids.get(player), 1);
-			}
+                event.getPlayer().teleport(loc.toBukkitLocation());
 
-			scheduledTeleports.remove(player);
-			scheduledTeleportUids.remove(player);
-		}
-	}
+                CallbackSender.sendCallback(scheduledTeleportUids.get(player), 0);
+            } catch (Exception ex) {
+                // Occurs if the target World is null
+                CallbackSender.sendCallback(scheduledTeleportUids.get(player), 1);
+            }
+
+            scheduledTeleports.remove(player);
+            scheduledTeleportUids.remove(player);
+        }
+    }
 }

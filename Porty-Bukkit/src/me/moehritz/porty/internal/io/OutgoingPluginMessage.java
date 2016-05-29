@@ -4,84 +4,61 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class OutgoingPluginMessage
-{
+public class OutgoingPluginMessage {
 
-	private ByteArrayOutputStream out = new ByteArrayOutputStream();
-	private DataOutputStream dout = new DataOutputStream(out);
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final DataOutputStream dout = new DataOutputStream(out);
 
-	public OutgoingPluginMessage(byte subChannel)
-	{
-		write(subChannel);
-	}
+    public OutgoingPluginMessage(byte subChannel) {
+        write(subChannel);
+    }
 
-	public OutgoingPluginMessage write(String msg)
-	{
-		try
-		{
-			dout.writeUTF(msg);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return this;
-	}
+    public OutgoingPluginMessage write(String msg) {
+        try {
+            dout.writeUTF(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 
-	public OutgoingPluginMessage write(byte msg)
-	{
-		try
-		{
-			dout.write(msg);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return this;
-	}
+    public OutgoingPluginMessage write(byte msg) {
+        try {
+            dout.write(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 
-	public OutgoingPluginMessage write(float msg)
-	{
-		try
-		{
-			dout.writeFloat(msg);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return this;
-	}
+    public OutgoingPluginMessage write(float msg) {
+        try {
+            dout.writeFloat(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 
-	public OutgoingPluginMessage write(double msg)
-	{
-		try
-		{
-			dout.writeDouble(msg);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return this;
-	}
+    public OutgoingPluginMessage write(double msg) {
+        try {
+            dout.writeDouble(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 
-	public OutgoingPluginMessage write(int msg)
-	{
-		try
-		{
-			dout.writeInt(msg);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return this;
-	}
+    public OutgoingPluginMessage write(int msg) {
+        try {
+            dout.writeInt(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 
-	public byte[] getMessage()
-	{
-		return out.toByteArray();
-	}
+    public byte[] getMessage() {
+        return out.toByteArray();
+    }
 }

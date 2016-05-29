@@ -2,19 +2,17 @@ package me.moehritz.porty.api;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public interface Callback
-{
+public interface Callback {
 
-	public enum State
-	{
-		NOT_STARTED, WAITING, TIMEOUT, SUCCESS, ERROR, SOMETHING_WEIRD_HAPPENED
-	}
+    enum State {
+        NOT_STARTED, WAITING, TIMEOUT, SUCCESS, ERROR, SOMETHING_WEIRD_HAPPENED
+    }
 
-	public State getState();
+    State getState();
 
-	public ProxiedPlayer getPlayer();
+    ProxiedPlayer getPlayer();
 
-	public void setRunnable(CallbackRunnable run);
+    void setRunnable(CallbackRunnable run);
 
-	public int getUniqueID();
+    int getUniqueID();
 }

@@ -1,9 +1,5 @@
 package me.moehritz.porty.internal.io;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import me.moehritz.porty.Porty;
 import me.moehritz.porty.internal.ICallback;
 import net.md_5.bungee.api.ProxyServer;
@@ -11,58 +7,53 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class InputHandler implements Listener
-{
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 
-	public InputHandler()
-	{
-		ProxyServer.getInstance().getPluginManager().registerListener(Porty.getInstance(), this);
-	}
+public class InputHandler implements Listener {
 
-	@EventHandler
-	public void onPluginMessageReceive(PluginMessageEvent input)
-	{
-		if (!input.getTag().equals(IOStatics.CHANNEL)) return;
+    public InputHandler() {
+        ProxyServer.getInstance().getPluginManager().registerListener(Porty.getInstance(), this);
+    }
 
-		DataInputStream in = new DataInputStream(new ByteArrayInputStream(input.getData()));
+    @EventHandler
+    public void onPluginMessageReceive(PluginMessageEvent input) {
+        if (!input.getTag().equals(IOStatics.CHANNEL)) return;
 
-		try
-		{
-			byte type = in.readByte();
-			switch (type)
-			{
-			case IOStatics.CALLBACK:
-				callback(in);
-				break;
-			default:
-				break;
-			}
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(input.getData()));
 
-			in.close();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
+        try {
+            byte type = in.readByte();
+            switch (type) {
+                case IOStatics.CALLBACK:
+                    callback(in);
+                    break;
+                default:
+                    break;
+            }
 
-	private void callback(DataInputStream in) throws IOException
-	{
-		int uid = in.readInt();
-		ICallback callback = (ICallback) Porty.getInstance().getTaskHandler().getRunningTask(uid);
-		if (callback == null) return;
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		int result = in.readInt();
-		switch (result)
-		{
-		case 0:
-			callback.success();
-			break;
-		case 1:
-			callback.fail(null);
-			break;
-		default:
-			callback.weirdThingsAreGoingOn();
-		}
-	}
+    private void callback(DataInputStream in) throws IOException {
+        int uid = in.readInt();
+        ICallback callback = (ICallback) Porty.getInstance().getTaskHandler().getRunningTask(uid);
+        if (callback == null) return;
+
+        int result = in.readInt();
+        switch (result) {
+            case 0:
+                callback.success();
+                break;
+            case 1:
+                callback.fail(null);
+                break;
+            default:
+                callback.weirdThingsAreGoingOn();
+        }
+    }
 }

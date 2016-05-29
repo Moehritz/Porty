@@ -2,19 +2,18 @@ package me.moehritz.porty.api;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public interface PortyAPI
-{
+public interface PortyAPI {
 
-	public Callback teleport(ProxiedPlayer player, ProxiedPlayer to);
+    Callback teleport(ProxiedPlayer player, ProxiedPlayer to);
 
-	public Callback teleport(ProxiedPlayer player, GlobalLocation to);
+    Callback teleport(ProxiedPlayer player, GlobalLocation to);
 
-	public Callback teleport(ProxiedPlayer player, ProxiedPlayer to, boolean ignoreTimer);
+    Callback teleport(ProxiedPlayer player, ProxiedPlayer to, boolean ignoreTimer);
 
-	public Callback teleport(ProxiedPlayer player, GlobalLocation to, boolean ignoreTimer);
+    Callback teleport(ProxiedPlayer player, GlobalLocation to, boolean ignoreTimer);
 
-	public TeleportRequestHandler getTeleportRequestHandler();
+    TeleportRequestHandler getTeleportRequestHandler();
 
-	public TaskHandler getTaskHandler();
+    TaskHandler getTaskHandler();
 
 }
